@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinTrack - Smart Personal Finance</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#a855f7',
+                        tertiary: '#ec4899',
+                        darkBg: '#0b1120',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS Animation CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* Landing Page Specific Styles */
+        .hero-gradient-text {
+            background: linear-gradient(to right, #818cf8, #c084fc, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shine 5s linear infinite;
+        }
+        
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+        
+        .floating-card {
+            animation: float-y 6s ease-in-out infinite;
+        }
+        
+        @keyframes float-y {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .blob-shape {
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            animation: morph 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes morph {
+            0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+            100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-slate-100 font-sans antialiased selection:bg-primary/30 selection:text-white overflow-x-hidden">
+
+    <!-- Ambient Background Orbs -->
+    <div class="bg-orb orb-1 opacity-60"></div>
+    <div class="bg-orb orb-2 opacity-60" style="bottom: 10%; right: -20%;"></div>
+
+    <!-- Navigation -->
+    <nav class="glass-header fixed w-full top-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary via-secondary to-tertiary flex items-center justify-center text-white shadow-lg shadow-primary/40">
+                        <i class="fa-solid fa-wallet text-xl drop-shadow-md"></i>
+                    </div>
+                    <span class="font-bold text-2xl tracking-tight text-white">FinTrack</span>
+                </div>
+                <div class="hidden md:flex gap-8 text-sm font-medium text-slate-300">
+                    <a href="#features" class="hover:text-white transition-colors">Features</a>
+                    <a href="#how-it-works" class="hover:text-white transition-colors">How it Works</a>
+                </div>
+                <div>
+                    <a href="dashboard.html" class="bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold py-2.5 px-6 rounded-full transition-all backdrop-blur-md flex items-center gap-2 group">
+                        Launch App <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-40 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 text-center">
+            
+            <div data-aos="fade-up" data-aos-duration="1000" class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card border border-primary/30 bg-primary/10 text-primary mb-8 text-sm font-semibold tracking-wide uppercase">
+                <span class="relative flex h-3 w-3">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
+                </span>
+                Welcome, Roshani!
+            </div>
+
+            <h1 data-aos="fade-up" data-aos-duration="1000" data-aos-delay="100" class="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight mb-8 leading-tight">
+                Take Control of Your <br/>
+                <span class="hero-gradient-text">Financial Future.</span>
+            </h1>
+            
+            <p data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200" class="mt-6 text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed font-light">
+                The most beautiful and intuitive personal finance tracker. Manage your budget, visualize your spending, and achieve your goals with ease.
+            </p>
+            
+            <div data-aos="fade-up" data-aos-duration="1000" data-aos-delay="300" class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="dashboard.html" class="btn-glow bg-slate-100 text-slate-900 hover:bg-white font-bold py-4 px-8 rounded-full shadow-xl transition-all active:scale-95 text-lg flex items-center justify-center gap-3 group relative z-10">
+                    Get Started Free <i class="fa-solid fa-rocket text-primary group-hover:scale-110 transition-transform"></i>
+                </a>
+                <a href="#features" class="glass-card bg-white/5 hover:bg-white/10 text-white border border-white/10 font-semibold py-4 px-8 rounded-full transition-all active:scale-95 text-lg flex items-center justify-center gap-3">
+                    Explore Features <i class="fa-solid fa-chevron-down opacity-70"></i>
+                </a>
+            </div>
+
+            <!-- Hero Image / Mockup -->
+            <div data-aos="fade-up" data-aos-duration="1500" data-aos-delay="500" class="mt-20 relative max-w-5xl mx-auto floating-card">
+                <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-transparent to-transparent z-10 h-full w-full rounded-3xl"></div>
+                
+                <!-- Abstract Dashboard Visual -->
+                <div class="glass-card rounded-3xl border border-white/10 p-4 md:p-8 relative overflow-hidden shadow-2xl shadow-primary/20 bg-slate-900/50 backdrop-blur-xl">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-secondary to-tertiary"></div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 opacity-80">
+                        <div class="col-span-1 md:col-span-2 h-40 rounded-2xl bg-slate-800/50 border border-slate-700/50 flex flex-col justify-end p-4">
+                             <div class="w-full flex items-end gap-2 h-20">
+                                 <div class="w-1/6 bg-primary/40 h-full rounded-t-sm"></div>
+                                 <div class="w-1/6 bg-secondary/40 h-2/3 rounded-t-sm"></div>
+                                 <div class="w-1/6 bg-tertiary/40 h-1/2 rounded-t-sm"></div>
+                                 <div class="w-1/6 bg-primary/40 h-4/5 rounded-t-sm"></div>
+                                 <div class="w-1/6 bg-secondary/40 h-full rounded-t-sm"></div>
+                                 <div class="w-1/6 bg-tertiary/40 h-1/3 rounded-t-sm"></div>
+                             </div>
+                        </div>
+                        <div class="col-span-1 h-40 rounded-2xl bg-slate-800/50 border border-slate-700/50 flex items-center justify-center relative overflow-hidden">
+                             <div class="w-24 h-24 rounded-full border-[12px] border-primary/30 border-t-secondary/80 border-r-tertiary/60 transform rotate-45"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Decorative Blur behind mockup -->
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-primary/20 blur-[100px] z-[-1] blob-shape"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-20" data-aos="fade-up">
+                <h2 class="text-primary font-semibold tracking-wider uppercase text-sm mb-3">Capabilities</h2>
+                <h3 class="text-3xl md:text-5xl font-bold">Everything you need. <br/><span class="text-slate-500">Nothing you don't.</span></h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                
+                <!-- Feature 1 -->
+                <div data-aos="fade-up" data-aos-delay="100" data-tilt data-tilt-glare data-tilt-max-glare="0.3" data-tilt-scale="1.05" class="glass-card rounded-[2rem] p-8 border border-white/5 hover:border-primary/30 group cursor-pointer">
+                    <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-chart-pie text-2xl text-primary"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3 text-white">Visual Analytics</h4>
+                    <p class="text-slate-400 font-light leading-relaxed">Instantly understand where your money goes with stunning interactive Pie and Bar charts powered by Chart.js.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div data-aos="fade-up" data-aos-delay="200" data-tilt data-tilt-glare data-tilt-max-glare="0.3" data-tilt-scale="1.05" class="glass-card rounded-[2rem] p-8 border border-white/5 hover:border-secondary/30 group cursor-pointer">
+                    <div class="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-bullseye text-2xl text-secondary"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3 text-white">Smart Budgeting</h4>
+                    <p class="text-slate-400 font-light leading-relaxed">Set your monthly budget and watch the dynamic progress bar track your remaining balance in real-time.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div data-aos="fade-up" data-aos-delay="300" data-tilt data-tilt-glare data-tilt-max-glare="0.3" data-tilt-scale="1.05" class="glass-card rounded-[2rem] p-8 border border-white/5 hover:border-tertiary/30 group cursor-pointer">
+                    <div class="w-14 h-14 rounded-2xl bg-tertiary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-bolt text-2xl text-tertiary"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3 text-white">Lightning Fast</h4>
+                    <p class="text-slate-400 font-light leading-relaxed">No loading screens, no databases. Your data is saved instantly to your browser's local storage for ultimate speed.</p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div data-aos="fade-up" data-aos-delay="400" data-tilt data-tilt-glare data-tilt-max-glare="0.3" data-tilt-scale="1.05" class="glass-card rounded-[2rem] p-8 border border-white/5 hover:border-success/30 group cursor-pointer">
+                    <div class="w-14 h-14 rounded-2xl bg-success/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-file-csv text-2xl text-success"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3 text-white">Export to CSV</h4>
+                    <p class="text-slate-400 font-light leading-relaxed">Your data belongs to you. Export your entire transaction history to a CSV file with a single click.</p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div data-aos="fade-up" data-aos-delay="500" data-tilt data-tilt-glare data-tilt-max-glare="0.3" data-tilt-scale="1.05" class="glass-card rounded-[2rem] p-8 border border-white/5 hover:border-warning/30 group cursor-pointer">
+                    <div class="w-14 h-14 rounded-2xl bg-warning/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-moon text-2xl text-warning"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3 text-white">Premium Dark Mode</h4>
+                    <p class="text-slate-400 font-light leading-relaxed">A beautifully crafted interface that looks gorgeous day or night, featuring state-of-the-art glassmorphism UI.</p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div data-aos="fade-up" data-aos-delay="600" data-tilt data-tilt-glare data-tilt-max-glare="0.3" data-tilt-scale="1.05" class="glass-card rounded-[2rem] p-8 border border-white/5 hover:border-danger/30 group cursor-pointer">
+                    <div class="w-14 h-14 rounded-2xl bg-danger/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-magnifying-glass text-2xl text-danger"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3 text-white">Advanced Filtering</h4>
+                    <p class="text-slate-400 font-light leading-relaxed">Instantly find any transaction using live search and category filters built right into the dashboard.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-primary/10"></div>
+        <div class="max-w-4xl mx-auto px-6 lg:px-8 text-center relative z-10" data-aos="zoom-in">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">Ready to take control?</h2>
+            <p class="text-xl text-slate-400 mb-10 font-light">Join thousands of users tracking their finances with FinTrack.</p>
+            <a href="dashboard.html" class="btn-glow bg-white text-slate-900 hover:bg-slate-100 font-bold py-4 px-10 rounded-full shadow-[0_0_40px_rgba(99,102,241,0.4)] transition-all active:scale-95 text-xl inline-flex items-center justify-center gap-3">
+                Open Dashboard <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="glass-header py-10 border-t border-white/5 mt-auto">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-wallet text-xl text-primary"></i>
+                <span class="font-bold text-xl text-white">FinTrack</span>
+            </div>
+            <p class="text-slate-500 text-sm font-medium text-center md:text-left">
+                &copy; 2026 FinTrack. Developed with ❤️ by Roshani.
+            </p>
+            <div class="flex gap-4 text-slate-400">
+                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-github text-xl"></i></a>
+                <a href="#" class="hover:text-white transition-colors"><i class="fa-brands fa-twitter text-xl"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AOS Animation JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Vanilla Tilt JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+    <script>
+        AOS.init({
+            once: true,
+            offset: 50,
+        });
+    </script>
+</body>
+</html>
