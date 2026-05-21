@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinTrack - Premium Finance Tracker</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#a855f7',
+                        tertiary: '#ec4899',
+                        success: '#10b981',
+                        danger: '#f43f5e',
+                        warning: '#f59e0b',
+                        darkBg: '#0b1120',
+                        lightBg: '#f8fafc'
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-lightBg dark:bg-darkBg text-slate-800 dark:text-slate-100 transition-colors duration-500 font-sans antialiased min-h-screen pb-12 relative overflow-x-hidden">
+
+    <!-- Ambient Background Orbs -->
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+
+    <!-- Navbar -->
+    <nav class="glass-header sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <a href="index.html" class="flex items-center gap-4 cursor-pointer hover:scale-105 transition-transform group">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary via-secondary to-tertiary flex items-center justify-center text-white shadow-lg shadow-primary/40 relative">
+                        <div class="absolute inset-0 rounded-2xl border border-white/20"></div>
+                        <i class="fa-solid fa-wallet text-2xl drop-shadow-md group-hover:scale-110 transition-transform"></i>
+                    </div>
+                    <span class="font-bold text-2xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-tertiary">FinTrack</span>
+                </a>
+                <div class="flex items-center gap-4">
+                    <a href="index.html" class="hidden sm:flex text-slate-500 hover:text-primary dark:text-slate-400 dark:hover:text-white font-medium items-center gap-2 transition-colors">
+                        <i class="fa-solid fa-house"></i> Home
+                    </a>
+                    <button id="themeToggle" class="w-12 h-12 rounded-full glass-card flex items-center justify-center hover:scale-110 transition-all focus:outline-none">
+                        <i class="fa-solid fa-moon text-xl text-slate-700 dark:text-yellow-300" id="themeIcon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 relative z-10">
+        
+        <!-- Top Section: Cards & Budget Setup -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+            
+            <!-- Summary Cards -->
+            <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <!-- Total Budget Card -->
+                <div data-tilt data-tilt-glare data-tilt-max-glare="0.2" data-tilt-max="5" class="glass-card rounded-[2rem] p-6 relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-12 h-12 rounded-2xl bg-primary/10 dark:bg-primary/20 text-primary flex items-center justify-center text-xl shadow-inner border border-primary/20">
+                                <i class="fa-solid fa-piggy-bank"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Monthly Budget</p>
+                                <h3 class="text-3xl font-bold mt-1 text-slate-900 dark:text-white" id="totalBudgetDisplay">$0.00</h3>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <div class="flex justify-between text-sm font-medium mb-2">
+                                <span class="text-slate-500 dark:text-slate-400">Usage</span>
+                                <span id="budgetUsageText" class="text-primary font-bold">0%</span>
+                            </div>
+                            <div class="w-full bg-slate-200/50 dark:bg-slate-700/50 rounded-full h-2.5 backdrop-blur-sm shadow-inner">
+                                <div class="bg-gradient-to-r from-primary to-secondary h-2.5 rounded-full transition-all duration-700 shadow-[0_0_10px_rgba(99,102,241,0.5)]" id="budgetProgressBar" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Income Card -->
+                <div data-tilt data-tilt-glare data-tilt-max-glare="0.2" data-tilt-max="5" class="glass-card rounded-[2rem] p-6 relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-gradient-to-br from-success/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="relative z-10 flex flex-col justify-between h-full">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-12 h-12 rounded-2xl bg-success/10 dark:bg-success/20 text-success flex items-center justify-center text-xl shadow-inner border border-success/20">
+                                <i class="fa-solid fa-arrow-trend-up"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Income</p>
+                                <h3 class="text-3xl font-bold mt-1 text-slate-900 dark:text-white" id="totalIncomeDisplay">$0.00</h3>
+                            </div>
+                        </div>
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center gap-2 mt-4 bg-slate-100/50 dark:bg-slate-800/50 py-2 px-3 rounded-xl w-fit backdrop-blur-sm border border-slate-200 dark:border-slate-700">
+                            <i class="fa-solid fa-plus-circle text-success"></i> This month
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Total Expenses Card -->
+                <div data-tilt data-tilt-glare data-tilt-max-glare="0.2" data-tilt-max="5" class="glass-card rounded-[2rem] p-6 relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-gradient-to-br from-danger/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="relative z-10 flex flex-col justify-between h-full">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-12 h-12 rounded-2xl bg-danger/10 dark:bg-danger/20 text-danger flex items-center justify-center text-xl shadow-inner border border-danger/20">
+                                <i class="fa-solid fa-chart-line"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Expenses</p>
+                                <h3 class="text-3xl font-bold mt-1 text-slate-900 dark:text-white" id="totalExpensesDisplay">$0.00</h3>
+                            </div>
+                        </div>
+                        <p class="text-sm font-medium text-slate-500 dark:text-slate-400 flex items-center gap-2 mt-4 bg-slate-100/50 dark:bg-slate-800/50 py-2 px-3 rounded-xl w-fit backdrop-blur-sm border border-slate-200 dark:border-slate-700">
+                            <i class="fa-solid fa-arrow-trend-down text-danger"></i> This month
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Remaining Budget Card -->
+                <div data-tilt data-tilt-glare data-tilt-max-glare="0.2" data-tilt-max="5" class="glass-card rounded-[2rem] p-6 relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-gradient-to-br from-secondary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="relative z-10 flex flex-col justify-between h-full">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="w-12 h-12 rounded-2xl bg-secondary/10 dark:bg-secondary/20 text-secondary flex items-center justify-center text-xl shadow-inner border border-secondary/20">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Remaining Budget</p>
+                                <h3 class="text-3xl font-bold mt-1 text-slate-900 dark:text-white transition-colors duration-300" id="remainingBudgetDisplay">$0.00</h3>
+                            </div>
+                        </div>
+                        <p class="text-sm font-medium mt-4 bg-slate-100/50 dark:bg-slate-800/50 py-2 px-3 rounded-xl w-fit backdrop-blur-sm border border-slate-200 dark:border-slate-700" id="remainingStatusText">
+                            <span class="text-success"><i class="fa-solid fa-check-circle"></i> Looking good!</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Set Budget Form -->
+            <div class="glass-card rounded-[2rem] p-7 flex flex-col justify-center border-t border-l border-white/40 dark:border-white/10 shadow-[8px_8px_32px_rgba(0,0,0,0.1)] dark:shadow-[8px_8px_32px_rgba(0,0,0,0.5)] bg-gradient-to-br from-white/60 to-white/30 dark:from-slate-800/60 dark:to-slate-900/40">
+                <h3 class="text-xl font-bold mb-5 flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
+                        <i class="fa-solid fa-gear text-slate-500 dark:text-slate-400 text-sm"></i>
+                    </div>
+                    Setup Budget
+                </h3>
+                <form id="budgetForm" class="flex flex-col gap-5">
+                    <div>
+                        <label for="budgetInput" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Monthly Budget Amount</label>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <span class="text-slate-500 font-medium sm:text-lg">$</span>
+                            </div>
+                            <input type="number" id="budgetInput" required min="0" step="0.01" class="form-input pl-9 block w-full rounded-xl border-slate-300/50 dark:border-slate-600/50 py-3 px-4 shadow-sm text-slate-900 dark:text-white border outline-none text-lg font-medium backdrop-blur-sm group-hover:border-primary/50 transition-colors" placeholder="0.00">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary hover:to-tertiary text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-primary/30 transition-all active:scale-95 flex justify-center items-center gap-2 mt-2">
+                        <i class="fa-solid fa-check"></i> Set Budget
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Middle Section: Form & Chart -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-10">
+            
+            <!-- Add Expense Form -->
+            <div class="glass-card rounded-[2rem] p-7 border-t border-l border-white/40 dark:border-white/10 shadow-[8px_8px_32px_rgba(0,0,0,0.1)] dark:shadow-[8px_8px_32px_rgba(0,0,0,0.5)]">
+                <h3 class="text-xl font-bold mb-6 flex items-center gap-3" id="formTitle">
+                    <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                        <i class="fa-solid fa-plus text-primary text-sm"></i>
+                    </div>
+                    Add New Transaction
+                </h3>
+                <form id="expenseForm" class="flex flex-col gap-5">
+                    <input type="hidden" id="editExpenseId">
+                    
+                    <div>
+                        <label for="type" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Type</label>
+                        <select id="type" required class="form-input block w-full rounded-xl border-slate-300/50 dark:border-slate-600/50 py-2.5 px-4 shadow-sm text-slate-900 dark:text-white border outline-none backdrop-blur-sm appearance-none cursor-pointer">
+                            <option value="Expense" selected>Expense</option>
+                            <option value="Income">Income</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="title" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Title</label>
+                        <input type="text" id="title" required class="form-input block w-full rounded-xl border-slate-300/50 dark:border-slate-600/50 py-2.5 px-4 shadow-sm text-slate-900 dark:text-white border outline-none backdrop-blur-sm" placeholder="e.g., Apple Store">
+                    </div>
+                    
+                    <div>
+                        <label for="amount" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Amount</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <span class="text-slate-500 font-medium sm:text-base">$</span>
+                            </div>
+                            <input type="number" id="amount" required min="0.01" step="0.01" class="form-input pl-8 block w-full rounded-xl border-slate-300/50 dark:border-slate-600/50 py-2.5 px-4 shadow-sm text-slate-900 dark:text-white border outline-none backdrop-blur-sm" placeholder="0.00">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="category" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Category</label>
+                        <select id="category" required class="form-input block w-full rounded-xl border-slate-300/50 dark:border-slate-600/50 py-2.5 px-4 shadow-sm text-slate-900 dark:text-white border outline-none backdrop-blur-sm appearance-none cursor-pointer">
+                            <option value="" disabled selected>Select a category</option>
+                            <option value="Food">Food & Dining</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Transportation">Transportation</option>
+                            <option value="Bills">Bills & Utilities</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Health">Health & Fitness</option>
+                            <option value="Travel">Travel</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="date" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Date</label>
+                        <input type="date" id="date" required class="form-input block w-full rounded-xl border-slate-300/50 dark:border-slate-600/50 py-2.5 px-4 shadow-sm text-slate-900 dark:text-white border outline-none backdrop-blur-sm cursor-pointer">
+                    </div>
+                    
+                    <div class="pt-2 btn-glow">
+                        <button type="submit" id="submitExpenseBtn" class="w-full bg-slate-900 dark:bg-white dark:text-slate-900 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-all active:scale-95 flex justify-center items-center gap-2 hover:bg-slate-800 dark:hover:bg-slate-100">
+                            <i class="fa-solid fa-plus"></i> Add Transaction
+                        </button>
+                    </div>
+                    <button type="button" id="cancelEditBtn" class="hidden w-full bg-slate-200/50 dark:bg-slate-700/50 backdrop-blur-md border border-slate-300 dark:border-slate-600 text-slate-800 dark:text-slate-200 font-semibold py-3 px-4 rounded-xl transition-all hover:bg-slate-300/50 dark:hover:bg-slate-600/50 active:scale-95">
+                        Cancel Edit
+                    </button>
+                </form>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="lg:col-span-2 flex flex-col gap-6">
+                <!-- Pie Chart -->
+                <div class="glass-card rounded-[2rem] p-7 flex flex-col border-t border-l border-white/40 dark:border-white/10 shadow-[8px_8px_32px_rgba(0,0,0,0.1)] dark:shadow-[8px_8px_32px_rgba(0,0,0,0.5)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center">
+                                <i class="fa-solid fa-chart-pie text-secondary text-sm"></i>
+                            </div>
+                            Category Distribution
+                        </h3>
+                    </div>
+                    <div class="relative w-full h-[250px] flex justify-center items-center rounded-2xl bg-slate-50/30 dark:bg-slate-900/30 border border-slate-200/50 dark:border-slate-700/50 shadow-inner p-4">
+                        <canvas id="expenseChart"></canvas>
+                        <div id="noDataMessage" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 hidden">
+                            <div class="w-16 h-16 rounded-full bg-slate-200/50 dark:bg-slate-800/50 flex items-center justify-center mb-4 border border-slate-300/50 dark:border-slate-700/50 shadow-inner">
+                                <i class="fa-solid fa-chart-simple text-2xl opacity-70"></i>
+                            </div>
+                            <p class="font-medium text-slate-500 dark:text-slate-400">No data to visualize yet</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bar Chart -->
+                <div class="glass-card rounded-[2rem] p-7 flex flex-col border-t border-l border-white/40 dark:border-white/10 shadow-[8px_8px_32px_rgba(0,0,0,0.1)] dark:shadow-[8px_8px_32px_rgba(0,0,0,0.5)]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                                <i class="fa-solid fa-chart-column text-primary text-sm"></i>
+                            </div>
+                            Monthly Spending
+                        </h3>
+                    </div>
+                    <div class="relative w-full h-[250px] flex justify-center items-center rounded-2xl bg-slate-50/30 dark:bg-slate-900/30 border border-slate-200/50 dark:border-slate-700/50 shadow-inner p-4">
+                        <canvas id="monthlyBarChart"></canvas>
+                        <div id="noBarDataMessage" class="absolute inset-0 flex flex-col items-center justify-center text-slate-400 hidden">
+                            <div class="w-16 h-16 rounded-full bg-slate-200/50 dark:bg-slate-800/50 flex items-center justify-center mb-4 border border-slate-300/50 dark:border-slate-700/50 shadow-inner">
+                                <i class="fa-solid fa-chart-simple text-2xl opacity-70"></i>
+                            </div>
+                            <p class="font-medium text-slate-500 dark:text-slate-400">No data to visualize yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Section: Transactions List -->
+        <div class="glass-card rounded-[2rem] p-7 border-t border-l border-white/40 dark:border-white/10 shadow-[8px_8px_32px_rgba(0,0,0,0.1)] dark:shadow-[8px_8px_32px_rgba(0,0,0,0.5)]">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6">
+                <div class="flex items-center gap-3">
+                    <h3 class="text-xl font-bold flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-tertiary/10 flex items-center justify-center">
+                            <i class="fa-solid fa-list text-tertiary text-sm"></i>
+                        </div>
+                        Recent Transactions
+                    </h3>
+                    <button id="exportCsvBtn" class="ml-2 text-sm font-semibold bg-success/10 text-success hover:bg-success hover:text-white transition-colors px-3 py-1.5 rounded-lg border border-success/20 flex items-center gap-2">
+                        <i class="fa-solid fa-file-csv"></i> Export
+                    </button>
+                </div>
+                
+                <!-- Filters and Search -->
+                <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-search text-slate-400 group-focus-within:text-primary transition-colors"></i>
+                        </div>
+                        <input type="text" id="searchInput" class="form-input pl-10 block w-full sm:w-64 rounded-xl border-slate-300/50 dark:border-slate-600/50 py-2.5 px-4 shadow-sm text-slate-900 dark:text-white border outline-none backdrop-blur-sm" placeholder="Search transactions...">
+                    </div>
+                    
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fa-solid fa-filter text-slate-400 text-sm"></i>
+                        </div>
+                        <select id="filterCategory" class="form-input pl-9 block w-full sm:w-48 rounded-xl border-slate-300/50 dark:border-slate-600/50 py-2.5 px-4 shadow-sm text-slate-900 dark:text-white border outline-none backdrop-blur-sm appearance-none cursor-pointer">
+                            <option value="All">All Categories</option>
+                            <option value="Food">Food & Dining</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Transportation">Transportation</option>
+                            <option value="Bills">Bills & Utilities</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Health">Health & Fitness</option>
+                            <option value="Travel">Travel</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transactions Table/List -->
+            <div class="overflow-hidden rounded-2xl border border-slate-200/50 dark:border-slate-700/50 shadow-inner bg-white/30 dark:bg-slate-900/30 backdrop-blur-md">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-slate-200/50 dark:divide-slate-700/50">
+                        <thead class="bg-slate-50/50 dark:bg-slate-800/50 backdrop-blur-sm">
+                            <tr>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Transaction Details</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Category</th>
+                                <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-slate-500 uppercase tracking-widest">Date</th>
+                                <th scope="col" class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-widest">Amount</th>
+                                <th scope="col" class="px-6 py-4 text-right text-xs font-bold text-slate-500 uppercase tracking-widest w-24">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="expenseList" class="divide-y divide-slate-200/50 dark:divide-slate-700/50">
+                            <!-- Dynamic content goes here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Empty State for List -->
+            <div id="emptyListState" class="hidden flex flex-col items-center justify-center py-16 text-slate-500">
+                <div class="w-20 h-20 bg-slate-100/50 dark:bg-slate-800/50 rounded-full flex items-center justify-center mb-5 border border-slate-200/50 dark:border-slate-700/50 shadow-inner relative">
+                    <div class="absolute inset-0 bg-primary/5 rounded-full animate-ping"></div>
+                    <i class="fa-solid fa-receipt text-3xl text-slate-400 relative z-10"></i>
+                </div>
+                <p class="text-xl font-bold text-slate-700 dark:text-slate-300">No transactions found</p>
+                <p class="text-slate-500 mt-2 font-medium">Add a transaction to get started or adjust your filters.</p>
+            </div>
+        </div>
+        
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-header mt-12 py-8 border-t border-slate-200 dark:border-slate-800 text-center text-slate-500 dark:text-slate-400 text-sm font-medium z-10 relative">
+        <p>&copy; 2026 FinTrack. Developed with ❤️ for Personal Finance Management.</p>
+    </footer>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 font-sans"></div>
+
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
